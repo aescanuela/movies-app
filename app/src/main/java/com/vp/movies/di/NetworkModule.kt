@@ -38,7 +38,7 @@ class NetworkModule {
         val originalHttpUrl = original.url()
 
         val url = originalHttpUrl.newBuilder()
-                .addQueryParameter("apiKey", BuildConfig.API_KEY)
+                .addQueryParameter("apikey", BuildConfig.API_KEY)
                 .build()
         val requestBuilder = original.newBuilder()
                 .url(url)
