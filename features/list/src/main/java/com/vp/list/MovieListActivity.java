@@ -104,4 +104,16 @@ public class MovieListActivity extends AppCompatActivity implements HasSupportFr
     public AndroidInjector<Fragment> supportFragmentInjector() {
         return dispatchingActivityInjector;
     }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_refresh) {
+            ListFragment listFragment = (ListFragment) getSupportFragmentManager().findFragmentByTag(ListFragment.TAG);
+            listFragment.refreshQuery(true);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 }

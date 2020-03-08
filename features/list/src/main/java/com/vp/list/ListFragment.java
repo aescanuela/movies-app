@@ -24,6 +24,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import dagger.android.support.AndroidSupportInjection;
 
 public class ListFragment extends Fragment implements GridPagingScrollListener.LoadMoreItemsListener, ListAdapter.OnItemClickListener {
@@ -38,6 +39,7 @@ public class ListFragment extends Fragment implements GridPagingScrollListener.L
     private ListAdapter listAdapter;
     private ViewAnimator viewAnimator;
     private RecyclerView recyclerView;
+    private SwipeRefreshLayout swipeRefresh;
     private ProgressBar progressBar;
     private TextView errorTextView;
     private String currentQuery = "Interview";
@@ -58,6 +60,7 @@ public class ListFragment extends Fragment implements GridPagingScrollListener.L
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        swipeRefresh = view.findViewById(R.id.swipeRefresh);
         recyclerView = view.findViewById(R.id.recyclerView);
         viewAnimator = view.findViewById(R.id.viewAnimator);
         progressBar = view.findViewById(R.id.progressBar);
@@ -69,7 +72,9 @@ public class ListFragment extends Fragment implements GridPagingScrollListener.L
 
         initBottomNavigation(view);
         initList();
+        initSwipeRefresh();
         listViewModel.observeMovies().observe(this, searchResult -> {
+            swipeRefresh.setRefreshing(false);
             if (searchResult != null) {
                 handleResult(listAdapter, searchResult);
             }
@@ -103,6 +108,24 @@ public class ListFragment extends Fragment implements GridPagingScrollListener.L
         gridPagingScrollListener = new GridPagingScrollListener(layoutManager);
         gridPagingScrollListener.setLoadMoreItemsListener(this);
         recyclerView.addOnScrollListener(gridPagingScrollListener);
+    }
+
+    private void initSwipeRefresh() {
+        swipeRefresh.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        refreshQuery(false);
+                    }
+                }
+        );
+    }
+
+    public void refreshQuery(boolean setRefreshing) {
+        if (setRefreshing) {
+            swipeRefresh.setRefreshing(true);
+        }
+        submitSearchQuery(currentQuery);
     }
 
     private void showProgressBar() {
