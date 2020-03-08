@@ -1,8 +1,6 @@
 package com.vp.list;
 
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -11,6 +9,8 @@ import android.widget.SearchView;
 
 import javax.inject.Inject;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import dagger.android.AndroidInjection;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
@@ -23,6 +23,9 @@ public class MovieListActivity extends AppCompatActivity implements HasSupportFr
     DispatchingAndroidInjector<Fragment> dispatchingActivityInjector;
     private SearchView searchView;
     private boolean searchViewExpanded = true;
+
+    // Text in SearchView
+    private String searchText = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +66,11 @@ public class MovieListActivity extends AppCompatActivity implements HasSupportFr
             }
         });
 
+        // Apply saved query text
+        if (searchText != null && !searchText.isEmpty()) {
+            searchView.setQuery(searchText, false);
+        }
+
         return true;
     }
 
@@ -70,7 +78,27 @@ public class MovieListActivity extends AppCompatActivity implements HasSupportFr
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(IS_SEARCH_VIEW_ICONIFIED, searchView.isIconified());
+
+        // Save current SearchView text
+        if (searchView.getQuery() != null && searchView.getQuery().length() > 0) {
+            outState.putString("SearchQuery", searchView.getQuery().toString());
+        }
     }
+
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        String searchQueryStr = savedInstanceState.getString("SearchQuery");
+
+        // Save in a variable, as the SearchView has not been initialized yet
+        if (searchQueryStr != null && !searchQueryStr.isEmpty()) {
+            searchText = searchQueryStr;
+        } else {
+            searchText = "";
+        }
+    }
+
 
     @Override
     public AndroidInjector<Fragment> supportFragmentInjector() {
