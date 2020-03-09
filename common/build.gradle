@@ -1,16 +1,17 @@
 apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion rootProject.compileSdkVersion
+
 
     defaultConfig {
         minSdkVersion rootProject.minSdkVersion
         targetSdkVersion rootProject.targetSdkVersion
 
-        testInstrumentationRunner "com.android.support.test.runner.AndroidJUnitRunner"
-
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -26,30 +27,17 @@ android {
 }
 
 dependencies {
-    implementation project(':common')
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-
-    // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$rootProject.kotlin"
-    implementation "androidx.core:core-ktx:$rootProject.kotlinCore"
-
-    implementation('androidx.constraintlayout:constraintlayout:1.1.2')
-
-    //support
     implementation "androidx.appcompat:appcompat:$rootProject.supportLibraryVersion"
-    implementation "androidx.recyclerview:recyclerview:$rootProject.supportLibraryVersion"
-
-    //tests
+    implementation "androidx.core:core-ktx:$rootProject.kotlinCore"
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
 
-    // Anko for Async tasks
-    implementation "org.jetbrains.anko:anko-common:$rootProject.anko"
-
-    //glide
-    implementation "com.github.bumptech.glide:glide:$rootProject.glide"
-    kapt "com.github.bumptech.glide:compiler:$rootProject.glide"
+    // Room DB
+    implementation "androidx.room:room-runtime:$rootProject.room"
+    kapt "androidx.room:room-compiler:$rootProject.room"
 
 }

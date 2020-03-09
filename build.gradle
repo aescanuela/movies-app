@@ -18,6 +18,9 @@ buildscript {
         dagger = '2.16'
         glide = '4.8.0'
         okhttp = '3.10.0'
+        kotlinCore = '1.0.0'
+        room = '2.2.3'
+        anko = '0.9'
     }
 
     repositories {
@@ -31,6 +34,17 @@ buildscript {
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
+    subprojects {
+        project.configurations.all {
+            resolutionStrategy.eachDependency { details ->
+                if (details.requested.group == 'androidx.arch.core' &&
+                        !details.requested.name.contains('androidx')) {
+                    details.useVersion "2.0.0"
+                }
+            }
+        }
+    }
+
 }
 
 allprojects {

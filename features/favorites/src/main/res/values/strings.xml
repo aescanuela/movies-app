@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">favorites</string>
     <string name="activity_label">Favorites</string>
+    <string name="data_loading_error">Data loading error</string>
+    <string name="empty_favorites">You have not added any favorite yet</string>
 </resources>

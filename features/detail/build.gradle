@@ -36,6 +36,8 @@ android {
 
 dependencies {
     implementation project(':dagger.addons')
+    implementation project(':common')
+
     implementation "androidx.appcompat:appcompat:$rootProject.supportLibraryVersion"
     implementation "androidx.constraintlayout:constraintlayout:$rootProject.constraintLayout"
     implementation 'org.jetbrains.kotlin:kotlin-reflect:1.2.60'
@@ -61,4 +63,8 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+
+    // Anko for Async tasks
+    implementation "org.jetbrains.anko:anko-common:$rootProject.anko"
+
 }
